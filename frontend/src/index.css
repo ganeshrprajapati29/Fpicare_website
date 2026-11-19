@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-white font-sans text-slate-700 antialiased; }
+  h1, h2, h3, h4 { @apply text-navy-900; }
+}
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60; }
+  .btn-primary { @apply btn bg-rose-500 text-white shadow-glow hover:bg-rose-600 hover:-translate-y-0.5; }
+  .btn-navy { @apply btn bg-navy-700 text-white hover:bg-navy-800; }
+  .btn-outline { @apply btn border border-navy-200 bg-white text-navy-800 hover:border-rose-400 hover:text-rose-600; }
+  .btn-ghost { @apply btn text-navy-700 hover:bg-navy-50; }
+  .input { @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100; }
+  .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500; }
+  .card { @apply rounded-2xl border border-slate-100 bg-white shadow-soft; }
+  .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold; }
+  .text-gradient { @apply bg-brand bg-clip-text text-transparent; }
+  .section { @apply py-14 sm:py-20; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+.animate-floaty { animation: floaty 5s ease-in-out infinite; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+.animate-fadeUp { animation: fadeUp .5s ease both; }

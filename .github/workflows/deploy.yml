@@ -1,0 +1,68 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Backend install & syntax check
+        working-directory: backend
+        run: |
+          npm ci --no-audit --no-fund
+          for f in $(find src -name '*.js'); do node --check "$f"; done
+      - name: Frontend build
+        working-directory: frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+  deploy:
+    needs: build-check
+    runs-on: ubuntu-latest
+    # Runs only after the VPS secrets have been added in GitHub settings.
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.AUTO_DEPLOY == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package release
+        run: |
+          tar --exclude=.git --exclude=node_modules --exclude=frontend/dist -czf /tmp/fpicare.tgz .
+          mv /tmp/fpicare.tgz ./fpicare.tgz
+
+      - name: Upload to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          source: fpicare.tgz
+          target: /tmp/fpicare-release
+
+      - name: Install & restart on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          command_timeout: 40m
+          script: |
+            set -e
+            rm -rf /tmp/fpicare-src && mkdir -p /tmp/fpicare-src
+            tar -xzf /tmp/fpicare-release/fpicare.tgz -C /tmp/fpicare-src
+            DOMAIN="${{ vars.DOMAIN }}" bash /tmp/fpicare-src/deploy/deploy.sh /tmp/fpicare-src
