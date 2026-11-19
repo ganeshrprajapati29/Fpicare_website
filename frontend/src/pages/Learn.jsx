@@ -23,7 +23,7 @@ const FAQS = [
 function Faq({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="card overflow-hidden">
+    <div data-reveal className="card overflow-hidden">
       <button onClick={() => setOpen(!open)} className="flex w-full items-center justify-between gap-4 p-5 text-left font-semibold text-navy-900">
         {q} <FiChevronDown className={`shrink-0 transition ${open ? 'rotate-180 text-rose-500' : ''}`} />
       </button>
@@ -42,7 +42,7 @@ export default function Learn() {
           <SectionTitle eyebrow="Know your options" title="Quick guides" />
           <div className="grid gap-6 md:grid-cols-2">
             {GUIDES.map((g) => (
-              <div key={g.t} className="card border-l-4 border-l-rose-500 p-7">
+              <div key={g.t} data-reveal className="card card-hover border-l-4 border-l-rose-500 p-7">
                 <h3 className="text-lg font-bold">{g.t}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-600">{g.d}</p>
               </div>

@@ -42,8 +42,8 @@ function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-rose-50 via-white to-navy-50">
-      <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-rose-200/50 blur-3xl" />
-      <div className="absolute -bottom-40 right-0 h-[28rem] w-[28rem] rounded-full bg-navy-200/50 blur-3xl" />
+      <div className="animate-blob absolute -left-32 -top-32 h-96 w-96 rounded-full bg-rose-200/50 blur-3xl" />
+      <div className="animate-blob absolute -bottom-40 right-0 h-[28rem] w-[28rem] rounded-full bg-navy-200/50 blur-3xl [animation-delay:5s]" />
       <div className="container-x relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-2 lg:py-24">
         <div key={i} className="animate-fadeUp text-center lg:text-left">
           <span className="badge bg-white px-3 py-1 text-rose-600 shadow-sm">
@@ -80,8 +80,9 @@ function Hero() {
           )}
         </div>
         <div className="relative mx-auto w-full max-w-md lg:max-w-lg">
-          <div className="absolute inset-6 rounded-full bg-brand opacity-20 blur-2xl" />
-          <div className="relative aspect-square rounded-full border-[10px] border-white bg-white shadow-2xl">
+          <div className="absolute inset-6 rounded-full bg-brand opacity-25 blur-2xl" />
+          <div className="animate-spin-slow absolute -inset-3 rounded-full border-2 border-dashed border-rose-300/60" />
+          <div key={i} className="animate-fadeUp relative aspect-square rounded-full border-[10px] border-white bg-white shadow-[0_40px_80px_-30px_rgba(21,39,104,.45)]">
             <img src={imgUrl(s.image) || '/logo.png'} alt="" className="h-full w-full rounded-full object-contain p-6" />
           </div>
           <div className="absolute -left-2 top-10 hidden animate-floaty rounded-2xl bg-white px-4 py-3 shadow-xl sm:block">
@@ -133,8 +134,8 @@ export default function Home() {
       <section className="border-y border-slate-100 bg-white">
         <div className="container-x grid grid-cols-2 gap-4 py-6 lg:grid-cols-4">
           {TRUST.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="flex items-center gap-3">
-              <div className="rounded-2xl bg-rose-50 p-3 text-rose-500"><Icon size={20} /></div>
+            <div key={title} data-reveal className="group flex items-center gap-3">
+              <div className="rounded-2xl bg-rose-50 p-3 text-rose-500 transition duration-300 group-hover:-translate-y-1 group-hover:bg-rose-500 group-hover:text-white group-hover:shadow-glow"><Icon size={20} /></div>
               <div>
                 <p className="text-sm font-semibold text-navy-900">{title}</p>
                 <p className="hidden text-xs text-slate-500 sm:block">{text}</p>
@@ -152,8 +153,8 @@ export default function Home() {
             {cats.map((c, idx) => {
               const Icon = CAT_ICONS[c.icon] || FaHeart;
               return (
-                <Link key={c._id} to={`/shop?category=${c.slug}`} className="group card flex flex-col items-center p-5 text-center transition hover:-translate-y-1 hover:shadow-xl">
-                  <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg transition group-hover:scale-110 ${CAT_COLORS[idx % CAT_COLORS.length]}`}>
+                <Link key={c._id} to={`/shop?category=${c.slug}`} data-reveal="zoom" style={{ transitionDelay: `${idx * 70}ms` }} className="group card card-hover flex flex-col items-center p-5 text-center">
+                  <div className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-lg transition duration-500 group-hover:rotate-6 group-hover:scale-110 ${CAT_COLORS[idx % CAT_COLORS.length]}`}>
                     <Icon size={26} />
                   </div>
                   <p className="mt-4 text-sm font-semibold text-navy-900">{c.name}</p>
@@ -185,9 +186,10 @@ export default function Home() {
         <div className="container-x">
           <SectionTitle eyebrow="Why FPicare" title={<>Safe Choices. Healthier Tomorrows. <span className="text-gradient">Happier Families.</span></>} />
           <div className="grid gap-6 md:grid-cols-3">
-            {PILLARS.map(({ icon: Icon, title, text, color }) => (
-              <div key={title} className="card p-8 transition hover:-translate-y-1 hover:shadow-xl">
-                <div className={`inline-flex rounded-2xl p-4 ${color}`}><Icon size={28} /></div>
+            {PILLARS.map(({ icon: Icon, title, text, color }, k) => (
+              <div key={title} data-reveal style={{ transitionDelay: `${k * 120}ms` }} className="group card card-hover relative overflow-hidden p-8">
+                <div className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-brand transition duration-500 group-hover:scale-x-100" />
+                <div className={`inline-flex rounded-2xl p-4 transition duration-500 group-hover:scale-110 ${color}`}><Icon size={28} /></div>
                 <h3 className="mt-5 text-xl font-bold">{title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-slate-500">{text}</p>
               </div>
@@ -200,8 +202,8 @@ export default function Home() {
       {saheli && (
         <section className="section pt-0">
           <div className="container-x">
-            <div className="relative overflow-hidden rounded-[2rem] bg-navy-800 text-white">
-              <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-rose-500/40 blur-3xl" />
+            <div data-reveal="zoom" className="relative overflow-hidden rounded-[2rem] bg-navy-800 text-white shadow-[0_40px_80px_-30px_rgba(15,29,79,.6)]">
+              <div className="animate-blob absolute -right-24 -top-24 h-80 w-80 rounded-full bg-rose-500/40 blur-3xl" />
               <div className="relative grid items-center gap-8 p-8 sm:p-12 lg:grid-cols-2">
                 <div>
                   <span className="badge bg-emerald-400/20 text-emerald-200"><FaLeaf /> Hormone-free</span>
@@ -218,7 +220,7 @@ export default function Home() {
                   </div>
                   <p className="mt-4 text-xs text-navy-200">Please consult your doctor before starting any contraceptive.</p>
                 </div>
-                <div className="rounded-3xl bg-white p-4 shadow-2xl">
+                <div data-reveal="right" className="rounded-3xl bg-white p-4 shadow-2xl transition duration-500 hover:rotate-1 hover:scale-[1.02]">
                   <img src={imgUrl(saheli.images?.[0])} alt={saheli.name} className="w-full rounded-2xl object-contain" />
                 </div>
               </div>
@@ -249,9 +251,9 @@ export default function Home() {
               { icon: FiPackage, t: 'We pack it discreetly', d: 'Plain outer box. No product names or brand on the package.' },
               { icon: FiSmile, t: 'Delivered to your door', d: 'Pay online or cash on delivery. Track your order anytime.' },
             ].map(({ icon: Icon, t, d }, k) => (
-              <div key={t} className="relative card p-8 text-center">
+              <div key={t} data-reveal style={{ transitionDelay: `${k * 150}ms` }} className="group relative card card-hover p-8 text-center">
                 <span className="absolute right-5 top-4 text-5xl font-extrabold text-rose-100">0{k + 1}</span>
-                <div className="mx-auto inline-flex rounded-full bg-brand p-4 text-white shadow-glow"><Icon size={24} /></div>
+                <div className="mx-auto inline-flex rounded-full bg-brand p-4 text-white shadow-glow transition duration-500 group-hover:rotate-12 group-hover:scale-110"><Icon size={24} /></div>
                 <h3 className="mt-5 text-lg font-bold">{t}</h3>
                 <p className="mt-2 text-sm text-slate-500">{d}</p>
               </div>
@@ -267,7 +269,7 @@ export default function Home() {
           <SectionTitle eyebrow="Real stories" title="Loved by Couples" />
           <div className="grid gap-6 md:grid-cols-3">
             {reviews.slice(0, 3).map((t) => (
-              <figure key={t._id} className="card p-7">
+              <figure key={t._id} data-reveal className="card card-hover p-7">
                 <FaQuoteLeft className="text-2xl text-rose-200" />
                 <blockquote className="mt-4 text-sm leading-relaxed text-slate-600">{t.comment}</blockquote>
                 <figcaption className="mt-5 flex items-center gap-3">
@@ -287,7 +289,7 @@ export default function Home() {
       {/* CTA */}
       <section className="pb-16">
         <div className="container-x">
-          <div className="relative overflow-hidden rounded-[2rem] bg-brand p-8 text-center text-white sm:p-14">
+          <div data-reveal="zoom" className="relative overflow-hidden rounded-[2rem] bg-brand p-8 text-center text-white shadow-glow sm:p-14">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,.25),transparent_40%)]" />
             <h2 className="relative text-2xl font-extrabold text-white sm:text-4xl">Bulk orders, clinics & distributors</h2>
             <p className="relative mx-auto mt-3 max-w-xl text-white/90">Looking to stock FPicare products for your pharmacy, NGO or health camp? Get special wholesale pricing.</p>

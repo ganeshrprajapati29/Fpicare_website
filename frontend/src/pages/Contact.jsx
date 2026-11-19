@@ -52,13 +52,13 @@ export default function Contact() {
               </>
             );
             return href ? (
-              <a key={t} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer" className="card flex items-center gap-4 p-5 transition hover:-translate-y-0.5 hover:shadow-xl">{inner}</a>
+              <a key={t} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer" className="card card-hover flex items-center gap-4 p-5" data-reveal="left">{inner}</a>
             ) : (
               <div key={t} className="card flex items-center gap-4 p-5">{inner}</div>
             );
           })}
         </div>
-        <form onSubmit={submit} className="card grid gap-4 p-6 sm:grid-cols-2 sm:p-8 lg:col-span-3">
+        <form onSubmit={submit} data-reveal="right" className="card grid gap-4 p-6 sm:grid-cols-2 sm:p-8 lg:col-span-3">
           <h3 className="text-xl font-bold sm:col-span-2">Send us a message</h3>
           <div><label className="label">Name *</label><input required className="input" value={form.name} onChange={set('name')} /></div>
           <div><label className="label">Mobile</label><input className="input" value={form.phone} onChange={set('phone')} /></div>

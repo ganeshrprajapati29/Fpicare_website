@@ -52,7 +52,7 @@ export default function Header() {
             <FiMenu size={22} />
           </button>
           <Link to="/" className="flex shrink-0 items-center gap-2">
-            <img src="/logo.png" alt="FPicare" className="h-11 w-11 rounded-full sm:h-14 sm:w-14" />
+            <img src="/logo.png" alt="FPicare" className="h-11 w-11 rounded-full shadow-md transition duration-500 hover:rotate-[360deg] sm:h-14 sm:w-14" />
             <div className="hidden leading-none sm:block">
               <p className="text-xl font-extrabold tracking-tight text-navy-800">
                 FP<span className="text-rose-500">icare</span>
@@ -68,8 +68,8 @@ export default function Header() {
                 to={n.to}
                 end={n.end}
                 className={({ isActive }) =>
-                  `rounded-full px-3 py-2 text-sm font-medium transition ${
-                    isActive && !n.to.includes('?') ? 'text-rose-600' : 'text-navy-800 hover:text-rose-600'
+                  `relative rounded-full px-3 py-2 text-sm font-medium transition after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-left after:rounded-full after:bg-rose-500 after:transition after:duration-300 ${
+                    isActive && !n.to.includes('?') ? 'text-rose-600 after:scale-x-100' : 'text-navy-800 after:scale-x-0 hover:text-rose-600 hover:after:scale-x-100'
                   }`
                 }
               >

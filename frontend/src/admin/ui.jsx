@@ -17,7 +17,7 @@ export function PageHeader({ title, subtitle, action }) {
 }
 
 export function Panel({ children, className = '' }) {
-  return <div className={`rounded-2xl border border-slate-200 bg-white ${className}`}>{children}</div>;
+  return <div className={`rounded-2xl border border-slate-200/80 bg-white shadow-[0_8px_30px_-16px_rgba(21,39,104,.18)] transition-shadow hover:shadow-[0_16px_40px_-18px_rgba(21,39,104,.28)] ${className}`}>{children}</div>;
 }
 
 export function Table({ head, children, empty }) {

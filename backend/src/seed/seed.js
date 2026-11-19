@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
-// Usage: npm run seed              -> admin, settings, categories + Saheli Plus (only if catalog is empty)
-//        npm run seed -- --demo     -> also adds demo products (for local testing)
-//        npm run seed -- --reset    -> wipes catalog (categories/products/coupons) and re-seeds
+// Usage: npm run seed            -> admin, settings and the full catalog; only adds what is missing
+//        npm run seed -- --reset -> wipes catalog (categories/products/coupons) and re-seeds
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import connectDB from '../config/db.js';
@@ -236,7 +235,6 @@ const heroSlides = [
 async function run() {
   await connectDB();
   const reset = process.argv.includes('--reset');
-  const demo = process.argv.includes('--demo');
 
   // Admin (created once; password is never overwritten on re-runs)
   const email = (process.env.ADMIN_EMAIL || 'admin@fpicare.in').toLowerCase();
@@ -265,21 +263,41 @@ async function run() {
     console.log('Catalog cleared');
   }
 
-  if ((await Product.countDocuments()) === 0) {
-    const cats = await Category.insertMany(categories.map((c) => ({ ...c, slug: slugify(c.name) })));
-    const map = Object.fromEntries(cats.map((c) => [c.name, c._id]));
-    const all = products(map);
-    const list = demo ? all : all.filter((p) => p.brand === 'Saheli');
-    const docs = list.map((p, i) => ({ ...p, slug: slugify(p.name), sku: `FPC-${String(i + 1).padStart(4, '0')}` }));
-    await Product.insertMany(docs);
-    await Coupon.create([
-      { code: 'WELCOME10', description: '10% off on your first order', type: 'percent', value: 10, maxDiscount: 100 },
-      { code: 'CARE50', description: '₹50 off on orders above ₹399', type: 'flat', value: 50, minOrder: 399 },
-    ]);
-    console.log(`Seeded ${cats.length} categories, ${docs.length} products, 2 coupons`);
-  } else {
-    console.log('Catalog already has products — skipped (use --reset to re-seed)');
+  // Upsert-missing: adds any category/product/coupon that does not exist yet (matched by slug/code).
+  // Existing records are never overwritten, so edits made in the admin panel are safe on redeploy.
+  let newCats = 0;
+  for (const c of categories) {
+    const slug = slugify(c.name);
+    // eslint-disable-next-line no-await-in-loop
+    const r = await Category.updateOne({ slug }, { $setOnInsert: { ...c, slug } }, { upsert: true });
+    newCats += r.upsertedCount;
   }
+  const cats = await Category.find({ slug: { $in: categories.map((c) => slugify(c.name)) } });
+  const map = Object.fromEntries(cats.map((c) => [c.name, c._id]));
+
+  let newProducts = 0;
+  const list = products(map);
+  for (let i = 0; i < list.length; i += 1) {
+    const p = list[i];
+    const slug = slugify(p.name);
+    // eslint-disable-next-line no-await-in-loop
+    const r = await Product.updateOne(
+      { slug },
+      { $setOnInsert: { ...p, slug, sku: `FPC-${String(i + 1).padStart(4, '0')}` } },
+      { upsert: true }
+    );
+    newProducts += r.upsertedCount;
+  }
+
+  const coupons = [
+    { code: 'WELCOME10', description: '10% off on your first order', type: 'percent', value: 10, maxDiscount: 100 },
+    { code: 'CARE50', description: '₹50 off on orders above ₹399', type: 'flat', value: 50, minOrder: 399 },
+  ];
+  for (const c of coupons) {
+    // eslint-disable-next-line no-await-in-loop
+    await Coupon.updateOne({ code: c.code }, { $setOnInsert: c }, { upsert: true });
+  }
+  console.log(`Seed done: +${newCats} categories, +${newProducts} products (existing ones untouched)`);
 
   await mongoose.disconnect();
 }

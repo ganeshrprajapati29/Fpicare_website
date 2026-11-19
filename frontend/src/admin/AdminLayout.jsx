@@ -19,7 +19,9 @@ export default function AdminLayout() {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
   const nav = useNavigate();
-  useEffect(() => setOpen(false), [loc.pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [loc.pathname]);
   useEffect(() => {
     document.title = 'Admin | FPicare';
   }, []);

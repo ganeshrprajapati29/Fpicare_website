@@ -9,9 +9,9 @@ export default function About() {
       <PageHero crumb="About us" title="Care for Every Couple" subtitle="FPicare makes family planning simple, private and accessible for every household in India." />
       <section className="section">
         <div className="container-x grid items-center gap-12 lg:grid-cols-2">
-          <div className="relative mx-auto max-w-md">
+          <div data-reveal="left" className="relative mx-auto max-w-md">
             <div className="absolute inset-0 rounded-full bg-brand opacity-20 blur-3xl" />
-            <img src="/logo.png" alt="FPicare" className="relative w-full rounded-full shadow-2xl" />
+            <img src="/logo.png" alt="FPicare" className="relative w-full animate-floaty rounded-full shadow-2xl" />
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-rose-500">Our story</p>
@@ -47,7 +47,7 @@ export default function About() {
               [FaUsers, 'For Every Couple', 'Fair pricing so family planning is affordable for everyone.'],
               [FaHandsHelping, 'Community', 'Supporting NGOs, clinics and health camps with bulk supply.'],
             ].map(([Icon, t, d]) => (
-              <div key={t} className="card p-7">
+              <div key={t} data-reveal className="group card card-hover p-7">
                 <div className="inline-flex rounded-2xl bg-brand p-3.5 text-white"><Icon size={22} /></div>
                 <h3 className="mt-4 text-lg font-bold">{t}</h3>
                 <p className="mt-2 text-sm text-slate-500">{d}</p>

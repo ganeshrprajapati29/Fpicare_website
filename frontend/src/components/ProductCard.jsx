@@ -9,14 +9,17 @@ export default function ProductCard({ p }) {
   const { add } = useCart();
   const off = p.mrp > p.price ? Math.round(((p.mrp - p.price) / p.mrp) * 100) : 0;
   return (
-    <div className="group card relative flex flex-col overflow-hidden transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div data-reveal="zoom" className="group card card-hover relative flex flex-col overflow-hidden">
       <Link to={`/product/${p.slug}`} className="relative block aspect-square overflow-hidden bg-gradient-to-br from-rose-50 to-navy-50">
-        <img src={imgUrl(p.images?.[0])} alt={p.name} loading="lazy" className="h-full w-full object-contain p-3 transition duration-500 group-hover:scale-105" />
+        <img src={imgUrl(p.images?.[0])} alt={p.name} loading="lazy" className="h-full w-full object-contain p-3 transition duration-700 ease-out group-hover:scale-110 group-hover:rotate-1" />
         <div className="absolute left-3 top-3 flex flex-col gap-1">
           {off > 0 && <span className="badge bg-rose-500 text-white">{off}% OFF</span>}
           {p.hormoneFree && <span className="badge bg-emerald-500 text-white">Hormone-free</span>}
           {p.isBestSeller && <span className="badge bg-navy-700 text-white">Bestseller</span>}
         </div>
+        <span className="absolute inset-x-3 bottom-3 translate-y-4 rounded-full bg-white/90 py-2 text-center text-xs font-semibold text-navy-800 opacity-0 shadow-lg backdrop-blur transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          View details
+        </span>
         {p.stock <= 0 && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/70 text-sm font-bold text-slate-700">Out of stock</div>
         )}
@@ -41,7 +44,7 @@ export default function ProductCard({ p }) {
             onClick={() => add(p)}
             disabled={p.stock <= 0}
             aria-label={`Add ${p.name} to cart`}
-            className="rounded-full bg-navy-700 p-2.5 text-white transition hover:bg-rose-500 disabled:opacity-40"
+            className="rounded-full bg-navy-700 p-2.5 text-white shadow-md transition hover:scale-110 hover:bg-rose-500 hover:shadow-glow disabled:opacity-40"
           >
             <FiShoppingBag size={16} />
           </button>
@@ -54,11 +57,11 @@ export default function ProductCard({ p }) {
 export function ProductSkeleton() {
   return (
     <div className="card overflow-hidden">
-      <div className="aspect-square animate-pulse bg-slate-100" />
+      <div className="shimmer aspect-square" />
       <div className="space-y-2 p-4">
-        <div className="h-3 w-1/3 animate-pulse rounded bg-slate-100" />
-        <div className="h-4 w-4/5 animate-pulse rounded bg-slate-100" />
-        <div className="h-5 w-1/4 animate-pulse rounded bg-slate-100" />
+        <div className="shimmer h-3 w-1/3 rounded" />
+        <div className="shimmer h-4 w-4/5 rounded" />
+        <div className="shimmer h-5 w-1/4 rounded" />
       </div>
     </div>
   );
