@@ -51,7 +51,7 @@ export default function AdminLayout() {
       </nav>
       <div className="space-y-1 border-t border-white/10 p-3">
         <Link to="/" target="_blank" className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-navy-100 hover:bg-white/10"><FiExternalLink /> View website</Link>
-        <button onClick={() => { logout(); nav('/login'); }} className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-navy-100 hover:bg-white/10"><FiLogOut /> Logout</button>
+        <button onClick={() => { logout(); nav('/admin/login'); }} className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm text-navy-100 hover:bg-white/10"><FiLogOut /> Logout</button>
       </div>
     </div>
   );

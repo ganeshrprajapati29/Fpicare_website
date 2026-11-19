@@ -21,6 +21,8 @@ const Policy = lazy(() => import('./pages/Policy'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
+const AdminLogin = lazy(() => import('./admin/AdminLogin'));
+const AccessDenied = lazy(() => import('./admin/AdminLogin').then((m) => ({ default: m.AccessDenied })));
 const Dashboard = lazy(() => import('./admin/pages/Dashboard'));
 const AdminProducts = lazy(() => import('./admin/pages/Products'));
 const ProductForm = lazy(() => import('./admin/pages/ProductForm'));
@@ -44,8 +46,11 @@ function RequireAuth({ children, admin = false }) {
   const { user, loading } = useAuth();
   const loc = useLocation();
   if (loading) return <PageLoader />;
-  if (!user) return <Navigate to={`/login?next=${encodeURIComponent(loc.pathname)}`} replace />;
-  if (admin && user.role !== 'admin') return <Navigate to="/" replace />;
+  if (!user) {
+    const to = admin ? '/admin/login' : '/login';
+    return <Navigate to={`${to}?next=${encodeURIComponent(loc.pathname)}`} replace />;
+  }
+  if (admin && user.role !== 'admin') return <AccessDenied />;
   return children;
 }
 
@@ -71,6 +76,7 @@ export default function App() {
           <Route path="policy/:slug" element={<Policy />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="admin/login" element={<AdminLogin />} />
         <Route path="admin" element={<RequireAuth admin><AdminLayout /></RequireAuth>}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<AdminProducts />} />

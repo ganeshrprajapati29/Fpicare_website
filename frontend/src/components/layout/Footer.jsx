@@ -58,6 +58,7 @@ export default function Footer() {
             <li><Link className="hover:text-rose-300" to="/policy/returns">Returns & Refunds</Link></li>
             <li><Link className="hover:text-rose-300" to="/policy/privacy">Privacy Policy</Link></li>
             <li><Link className="hover:text-rose-300" to="/policy/terms">Terms & Conditions</Link></li>
+            <li><Link className="hover:text-rose-300" to="/admin">Admin Login</Link></li>
           </ul>
         </div>
         <div>
